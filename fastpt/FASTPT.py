@@ -99,7 +99,7 @@ class FASTPT:
         # dk_test=np.ones_like(dk)*dk[0]
         delta_L = (log(k[-1]) - log(k[0])) / (k.size - 1)
         
-        print(delta_L)
+       
 
 
         dk_test = np.ones_like(dk) * delta_L
