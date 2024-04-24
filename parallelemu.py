@@ -3,11 +3,7 @@ from multiprocessing import Pool
 import linps
 
 def ps(n):
-    i = 0
-    ps = []
-    for i in range(n):
-        ps += linps
-        i += 1
+    ps = linps
     return ps
 
 if __name__ == '__main__':
