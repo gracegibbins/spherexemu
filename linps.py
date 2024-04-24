@@ -1,7 +1,7 @@
-import matplotlib
-import matplotlib.pyplot as plt
+#import matplotlib
+#import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
+#import pandas as pd
 import scipy.stats as sp # for calculating standard error
 from math import cos, exp, pi
 from scipy.integrate import quad, quad_vec
@@ -22,11 +22,11 @@ from gpsclass import CalcGalaxyPowerSpec
 bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
 
 #Cosmo Parameters
-prior = np.array([[60,85], #H0
-                  [0.01,0.04], #omega_b
-                  [0.01,0.3], #omega_c
+prior = np.array([[20,100], #H0
+                  [0.005,1], #omega_b
+                  [0.02,.3], #omega_c
                   [1.2e-9,2.7e-9], #As
-                  [0.87,1.07]]) #ns
+                  [0.8,1.2]]) #ns
 
 #Number of cosmo params in prior array
 n_dim = 5
@@ -66,6 +66,6 @@ k_array, p_array = (get_linps(create_lhs_samples(x,prior)))
 
 print("K Values:", k_array, "\nPower Spectrum Values:", p_array)
 
-plt.plot(k_array, p_array)
+#plt.plot(k_array, p_array)
 
-plt.show()
+#plt.show()
