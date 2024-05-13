@@ -24,7 +24,7 @@ bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
 #Cosmo Parameters
 prior = np.array([[20,100], #H0
                   [0.005,1], #omega_b
-                  [0.02,.3], #omega_c
+                  [0.1,.3], #omega_c
                   [1.2e-9,2.7e-9], #As
                   [0.8,1.2]]) #ns
 
@@ -39,7 +39,7 @@ def create_lhs_samples(n_samples , prior):
 
 #Creates linear power spectra from priors - input into galaxy ps class
 def get_linps(params):
-    npoints = 20 #smallest possible is four & need to be even numbers
+    npoints = 20 #number of ps/k values: smallest possible is four & need to be even numbers
     ps = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     k = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     for row in range(len(params[:,0])):
