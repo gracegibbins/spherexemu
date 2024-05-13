@@ -2,12 +2,9 @@ import multiprocessing
 from multiprocessing import Pool
 import linps
 
-def ps(self):
-    #i = 0
+
+def ps(n):
     ps = linps
-    #for i in range(n):
-     #   ps += linps
-      #  i += 1
     return ps
 
 if __name__ == '__main__':
