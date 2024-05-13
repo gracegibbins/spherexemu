@@ -17,7 +17,6 @@ import time
 
 from gpsclass import CalcGalaxyPowerSpec
 
-
 #Galaxy Bias Parameter
 bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
 
@@ -39,11 +38,10 @@ def create_lhs_samples(n_samples , prior):
 
 #Creates linear power spectra from priors - input into galaxy ps class
 def get_linps(params):
-    npoints = 20 #number of ps/k values: smallest possible is four & need to be even numbers
+    npoints = 10 #number of ps/k values: smallest possible is four & need to be even numbers
     ps = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     k = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     for row in range(len(params[:,0])):
-        print("params:", params[row])
         H0, ombh2, omch2, As, ns = params[row,0], params[row,1], params[row,2], params[row,3], params[row,4]
         pars = camb.CAMBparams()
         pars.set_cosmology(H0=H0, ombh2=ombh2, omch2=omch2)
@@ -57,15 +55,19 @@ def get_linps(params):
         ps_nonlin = nonlin.get_nonlinear_ps(0)
         k[row] = (kh)
         ps[row] = ps_nonlin #(pk[0])
-    return k, ps #karray, Psnonlin = get_linps(params)
+    return params[row], k[0], ps[0] #karray, Psnonlin = get_linps(params)
 
 #Number of PS to Generate
 x = 1
 
-k_array, p_array = (get_linps(create_lhs_samples(x,prior)))
+out_param = get_linps(create_lhs_samples(x,prior))[0]
+out_k = get_linps(create_lhs_samples(x,prior))[1]
+out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
-print("K Values:", k_array, "\nPower Spectrum Values:", p_array)
+f = open("trainingset.txt", "a") #CHANGE TO "a" BEFORE RUNNING ACTUAL TRAINING SET
+f.write(str(out_param))
+f.write(str(out_k))
+f.write(str(out_ps))
+f.close()
 
-#plt.plot(k_array, p_array)
-
-#plt.show()
+#print("Params:", params, "\nK Values:", k_array, "\nPower Spectrum Values:", p_array)
