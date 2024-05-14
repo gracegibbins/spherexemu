@@ -60,11 +60,11 @@ def get_linps(params):
 #Number of PS to Generate
 x = 1
 
-out_param = get_linps(create_lhs_samples(x,prior))[0]
-out_k = get_linps(create_lhs_samples(x,prior))[1]
-out_ps = get_linps(create_lhs_samples(x,prior))[2]
+out_param, out_k, out_ps = get_linps(create_lhs_samples(x,prior))
+#out_k = get_linps(create_lhs_samples(x,prior))[1]
+#out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
-out = get_linps(create_lhs_samples(x,prior))
+#out = get_linps(create_lhs_samples(x,prior))
 
 f = open("trainingset.txt", "a")
 f.write("\n")
