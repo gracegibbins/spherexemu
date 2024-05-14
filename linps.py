@@ -52,15 +52,17 @@ def get_linps(params):
         kh, z, pk = results.get_matter_power_spectrum(minkh=1e-3, maxkh=.2, npoints=npoints) #pk is 2 values 
         f = .7 #####PLACEHOLDER
         nonlin = CalcGalaxyPowerSpec(f,pk[0],kh,bias,params[row])
-        ps_nonlin = nonlin.get_nonlinear_ps(0)
+        ps_nonlin_mono = nonlin.get_nonlinear_ps(0)
+        ps_nonlin_quad = nonlin.get_nonlinear_ps(2)
         k[row] = (kh)
-        ps[row] = ps_nonlin #(pk[0])
-    return params[row], k[0], ps[0] #karray, Psnonlin = get_linps(params)
+        psm[row] = ps_nonlin_mono #(pk[0])
+        psq[row] = ps_nonlin_quad #(pk[2])
+    return params[row], k[0], psm[0], psq[0] #karray, Psnonlin = get_linps(params)
 
 #Number of PS to Generate
 x = 1
 
-out_param, out_k, out_ps = get_linps(create_lhs_samples(x,prior))
+out_param, out_k, out_psm, out_psq = get_linps(create_lhs_samples(x,prior))
 #out_k = get_linps(create_lhs_samples(x,prior))[1]
 #out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
@@ -71,7 +73,8 @@ f.write("\n")
 #f.write(str(out)) OUTPUTS (ARRAY), (ARRAY), (ARRAY)
 f.write(str(out_param))
 #f.write(str(out_k))
-f.write(str(out_ps))
+f.write(str(out_psm))
+f.write(str(out_psq))
 f.close()
 
 g = open("ktraining.txt", "w")
