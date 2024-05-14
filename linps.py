@@ -64,10 +64,20 @@ out_param = get_linps(create_lhs_samples(x,prior))[0]
 out_k = get_linps(create_lhs_samples(x,prior))[1]
 out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
-f = open("trainingset.txt", "a") #CHANGE TO "a" BEFORE RUNNING ACTUAL TRAINING SET
+out = get_linps(create_lhs_samples(x,prior))
+
+f = open("trainingset.txt", "a")
+f.write("\n")
+#f.write(str(out)) OUTPUTS (ARRAY), (ARRAY), (ARRAY)
 f.write(str(out_param))
-f.write(str(out_k))
+#f.write(str(out_k))
 f.write(str(out_ps))
 f.close()
+
+g = open("ktraining.txt", "w")
+g.write(str(out_k))
+g.close()
+
+
 
 #print("Params:", params, "\nK Values:", k_array, "\nPower Spectrum Values:", p_array)
