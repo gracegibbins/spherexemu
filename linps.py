@@ -39,7 +39,8 @@ def create_lhs_samples(n_samples , prior):
 #Creates linear power spectra from priors - input into galaxy ps class
 def get_linps(params):
     npoints = 10 #number of ps/k values: smallest possible is four & need to be even numbers
-    ps = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
+    psm = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
+    psq = np.zeros((len(params[:,0]),npoints))
     k = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     for row in range(len(params[:,0])):
         H0, ombh2, omch2, As, ns = params[row,0], params[row,1], params[row,2], params[row,3], params[row,4]
