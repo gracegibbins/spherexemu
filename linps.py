@@ -17,7 +17,6 @@ import time
 
 from gpsclass import CalcGalaxyPowerSpec
 
-
 #Galaxy Bias Parameter
 bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
 
@@ -39,11 +38,11 @@ def create_lhs_samples(n_samples , prior):
 
 #Creates linear power spectra from priors - input into galaxy ps class
 def get_linps(params):
-    npoints = 20 #number of ps/k values: smallest possible is four & need to be even numbers
-    ps = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
+    npoints = 10 #number of ps/k values: smallest possible is four & need to be even numbers
+    psm = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
+    psq = np.zeros((len(params[:,0]),npoints))
     k = np.zeros((len(params[:,0]),npoints)) #number of samples x number of k bins
     for row in range(len(params[:,0])):
-        print("params:", params[row])
         H0, ombh2, omch2, As, ns = params[row,0], params[row,1], params[row,2], params[row,3], params[row,4]
         pars = camb.CAMBparams()
         pars.set_cosmology(H0=H0, ombh2=ombh2, omch2=omch2)
@@ -54,18 +53,35 @@ def get_linps(params):
         kh, z, pk = results.get_matter_power_spectrum(minkh=1e-3, maxkh=.2, npoints=npoints) #pk is 2 values 
         f = .7 #####PLACEHOLDER
         nonlin = CalcGalaxyPowerSpec(f,pk[0],kh,bias,params[row])
-        ps_nonlin = nonlin.get_nonlinear_ps(0)
+        ps_nonlin_mono = nonlin.get_nonlinear_ps(0)
+        ps_nonlin_quad = nonlin.get_nonlinear_ps(2)
         k[row] = (kh)
-        ps[row] = ps_nonlin #(pk[0])
-    return k, ps #karray, Psnonlin = get_linps(params)
+        psm[row] = ps_nonlin_mono #(pk[0])
+        psq[row] = ps_nonlin_quad #(pk[2])
+    return params[row], k[0], psm[0], psq[0] #karray, Psnonlin = get_linps(params)
 
 #Number of PS to Generate
 x = 1
 
-k_array, p_array = (get_linps(create_lhs_samples(x,prior)))
+out_param, out_k, out_psm, out_psq = get_linps(create_lhs_samples(x,prior))
+#out_k = get_linps(create_lhs_samples(x,prior))[1]
+#out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
-print("K Values:", k_array, "\nPower Spectrum Values:", p_array)
+#out = get_linps(create_lhs_samples(x,prior))
 
-#plt.plot(k_array, p_array)
+f = open("trainingset.txt", "a")
+f.write("\n")
+#f.write(str(out)) OUTPUTS (ARRAY), (ARRAY), (ARRAY)
+f.write(str(out_param))
+#f.write(str(out_k))
+f.write(str(out_psm))
+f.write(str(out_psq))
+f.close()
 
-#plt.show()
+g = open("ktraining.txt", "w")
+g.write(str(out_k))
+g.close()
+
+
+
+#print("Params:", params, "\nK Values:", k_array, "\nPower Spectrum Values:", p_array)
