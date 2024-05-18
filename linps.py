@@ -17,6 +17,7 @@ import time
 
 from gpsclass import CalcGalaxyPowerSpec
 from lhc import create_lhs_samples
+import out
 
 #Galaxy Bias Parameter
 bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
@@ -56,24 +57,18 @@ def get_linps(params):
 x = 1
 
 out_param, out_k, out_psm, out_psq = get_linps(create_lhs_samples(x,prior))
-#out_k = get_linps(create_lhs_samples(x,prior))[1]
-#out_ps = get_linps(create_lhs_samples(x,prior))[2]
 
-#out = get_linps(create_lhs_samples(x,prior))
+np.savez(out,out_param,out_psm,out_psq)
 
-f = open("trainingset.txt", "a")
-f.write("\n")
-#f.write(str(out)) OUTPUTS (ARRAY), (ARRAY), (ARRAY)
-f.write(str(out_param))
-#f.write(str(out_k))
-f.write(str(out_psm))
-f.write(str(out_psq))
-f.close()
+#prints parameters, mono ps, quad ps on new line in text file
+#f = open("trainingset.txt", "a")
+#f.write("\n")
+#f.write(str(out_param))
+#f.write(str(out_psm))
+#f.write(str(out_psq))
+#f.close()
 
-g = open("ktraining.txt", "w")
-g.write(str(out_k))
-g.close()
-
-
-
-#print("Params:", params, "\nK Values:", k_array, "\nPower Spectrum Values:", p_array)
+#prints k modes into text file
+#g = open("ktraining.txt", "w")
+#g.write(str(out_k))
+#g.close()
