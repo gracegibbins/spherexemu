@@ -3,6 +3,7 @@
 import numpy as np
 #import pandas as pd
 import scipy.stats as sp # for calculating standard error
+import multiprocessing
 from math import cos, exp, pi
 from scipy.integrate import quad, quad_vec
 from scipy import interpolate
@@ -17,7 +18,7 @@ import time
 
 from gpsclass import CalcGalaxyPowerSpec
 from lhc import create_lhs_samples
-import out
+#import out
 
 #Galaxy Bias Parameter
 bias = np.array([1.9,-0.6,(-4./7)*(1.9-1),(32./315.)*(1.9-1)])
@@ -53,12 +54,18 @@ def get_linps(params):
         psq[row] = ps_nonlin_quad #(pk[2])
     return params[row], k[0], psm[0], psq[0] #karray, Psnonlin = get_linps(params)
 
+#Parallelizing linps
+
+with multiprocessing.Pool() as pool:
+	results = pool.map(get_linps, create_lhs_samples(x, prior))
+
+
 #Number of PS to Generate
 x = 1
 
-out_param, out_k, out_psm, out_psq = get_linps(create_lhs_samples(x,prior))
+out_param, out_k, out_psm, out_psq = results
 
-np.savez(out,out_param,out_psm,out_psq)
+np.save(out,params=out_param,psm=out_psm,psq=out_psq)
 
 #prints parameters, mono ps, quad ps on new line in text file
 #f = open("trainingset.txt", "a")
